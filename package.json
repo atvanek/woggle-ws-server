@@ -1,6 +1,7 @@
 {
 	"scripts": {
 		"build": "npx tsc",
+		"zip": "git archive --format=zip --output ../woggle-ws-server.zip  main",
 		"start": "node dist/server.js"
 	},
 	"dependencies": {
