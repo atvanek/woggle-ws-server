@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
@@ -6,29 +6,31 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// const MODE = process.env.NODE_ENV;
-// const BASE_URL =
-// 	MODE === 'production'
-// 		? 'https://woggle-0283af63f9a9.herokuapp.com'
-// 		: 'http://localhost:3000';
+const MODE = process.env.NODE_ENV;
+const BASE_URL =
+	MODE === 'production'
+		? 'https://woggle-0283af63f9a9.herokuapp.com'
+		: 'http://localhost:3000';
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
 	cors: {
-		origin: ['http://localhost:3000'],
+		origin: [BASE_URL],
 	},
 });
 
 app.use(express.json());
 app.use(cors());
 
-
-app.use((err, _req, res, _next) => {
-	console.log(err);
-	res.status(500).send({ error: err });
-});
+//global error handler
+app.use(
+	(err: Error, _req: Request, res: Response, _next: NextFunction): void => {
+		console.log(err);
+		res.status(500).send({ error: err });
+	}
+);
 
 // import generateLetters from '../utils/generateLetters.js';
 
@@ -97,13 +99,12 @@ io.on('connection', (socket) => {
 	// 	io.in(room).emit('end-game', JSON.stringify(scores));
 	// });
 	//USER LEAVES ROOM
-	socket.on('disconnecting', () => {
-		console.log('disconnecting', socket.id);
-		delete users[socket.id];
-	});
+	// socket.on('disconnecting', () => {
+	// 	console.log('disconnecting', socket.id);
+	// 	delete users[socket.id];
+	// });
 });
 
 httpServer.listen(PORT, () => {
 	console.log(`Listening on port ${PORT}...`);
 });
-
