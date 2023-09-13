@@ -10,15 +10,13 @@ const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const MODE = process.env.NODE_ENV;
-const BASE_URL = MODE === 'production'
-    ? 'https://woggle-0283af63f9a9.herokuapp.com'
-    : 'http://localhost:3000';
+const BASE_URL = MODE === 'production' ? 'https://woggle.vercel.app' : 'http://localhost:3000';
 const app = (0, express_1.default)();
-const PORT = process.env.PORT || 8080;
+const PORT = MODE === 'production' ? 80 : 8080;
 const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer, {
     cors: {
-        origin: [BASE_URL],
+        origin: BASE_URL,
     },
 });
 app.use(express_1.default.json());
