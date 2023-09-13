@@ -21,7 +21,14 @@ const io = new Server(httpServer, {
 });
 
 app.use(express.json());
-app.use(cors());
+app.use(
+	cors({
+		origin: BASE_URL,
+		methods: ['GET', 'POST'],
+		allowedHeaders: ['Content-Type', 'Authorization'],
+		credentials: true,
+	})
+);
 
 //global error handler
 app.use(
@@ -98,10 +105,9 @@ io.on('connection', (socket) => {
 	// 	io.in(room).emit('end-game', JSON.stringify(scores));
 	// });
 	//USER LEAVES ROOM
-	// socket.on('disconnecting', () => {
-	// 	console.log('disconnecting', socket.id);
-	// 	delete users[socket.id];
-	// });
+	socket.on('disconnecting', () => {
+		console.log('disconnecting', socket.id);
+	});
 });
 
 httpServer.listen(PORT, () => {

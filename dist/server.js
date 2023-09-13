@@ -16,7 +16,7 @@ const PORT = MODE === 'production' ? 3000 : 8080;
 const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer, {
     cors: {
-        origin: '*',
+        origin: BASE_URL,
         methods: ['GET', 'POST'],
     },
 });
@@ -90,10 +90,9 @@ io.on('connection', (socket) => {
     // 	io.in(room).emit('end-game', JSON.stringify(scores));
     // });
     //USER LEAVES ROOM
-    // socket.on('disconnecting', () => {
-    // 	console.log('disconnecting', socket.id);
-    // 	delete users[socket.id];
-    // });
+    socket.on('disconnecting', () => {
+        console.log('disconnecting', socket.id);
+    });
 });
 httpServer.listen(PORT, () => {
     console.log(`Listening on port ${PORT}...`);
