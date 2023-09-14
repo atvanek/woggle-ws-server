@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 
@@ -11,7 +11,7 @@ const BASE_URL =
 	MODE === 'production' ? 'https://woggle.vercel.app' : 'http://localhost:3000';
 
 const app = express();
-const PORT = MODE === 'production' ? 3000 : 8080;
+const PORT = process.env.PORT as string | 8080;
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
 	cors: {
