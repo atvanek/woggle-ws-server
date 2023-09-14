@@ -1,7 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import cors from 'cors';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -19,16 +18,6 @@ const io = new Server(httpServer, {
 		methods: ['GET', 'POST'],
 	},
 });
-
-app.use(express.json());
-
-//global error handler
-app.use(
-	(err: Error, _req: Request, res: Response, _next: NextFunction): void => {
-		console.log(err);
-		res.status(500).send({ error: err });
-	}
-);
 
 // import generateLetters from '../utils/generateLetters.js';
 
