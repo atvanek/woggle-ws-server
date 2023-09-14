@@ -15,7 +15,7 @@ const PORT = MODE === 'production' ? 3000 : 8080;
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
 	cors: {
-		origin: '*',
+		origin: [BASE_URL, 'https://woggle-ws-server-fa4652914358.herokuapp.com/'],
 	},
 });
 
