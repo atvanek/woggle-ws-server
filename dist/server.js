@@ -35,15 +35,15 @@ io.on('connection', (socket) => {
     //USER JOINS ROOM
     socket.on('join-room', (user, room, socketId) => __awaiter(void 0, void 0, void 0, function* () {
         var _a;
-        console.log('joined room');
+        console.log('joined room event');
         //add user to room
         yield socket.join(room);
         //retrieve list of socket ids in current room
         const currentRoomSet = (_a = io.sockets.adapter.rooms) === null || _a === void 0 ? void 0 : _a.get(room);
         if (currentRoomSet) {
             const currentRoom = [...currentRoomSet];
-            console.log(currentRoom);
-            console.log(socketId, 'socketId');
+            console.log('currentRoom:', currentRoom);
+            console.log('socketId:', socketId);
             //generate username if not logged-in
             const username = !user ? `guest${currentRoom.length + 1}` : user;
             const host = currentRoom.length === 1;
@@ -54,7 +54,7 @@ io.on('connection', (socket) => {
             // 	const { username } = users[socketId];
             // 	return username;
             // });
-            console.log(users);
+            console.log('all users:', users);
             //emit user-added event to all users in current room
             // io.in(room).emit('user-added', JSON.stringify(roomUsers));
             // emits username-generated event to new socket
@@ -63,7 +63,9 @@ io.on('connection', (socket) => {
     }));
     //USER DISCONNECTS
     socket.on('disconnecting', () => {
+        delete users[socket.id];
         console.log('disconnecting', socket.id);
+        console.log('users:', users);
     });
 });
 // socket.on('new-board', (room) => {

@@ -39,15 +39,15 @@ io.on('connection', (socket) => {
 	socket.on(
 		'join-room',
 		async (user: string, room: string, socketId: string) => {
-			console.log('joined room')
+			console.log('joined room event');
 			//add user to room
 			await socket.join(room);
 			//retrieve list of socket ids in current room
 			const currentRoomSet = io.sockets.adapter.rooms?.get(room);
 			if (currentRoomSet) {
 				const currentRoom = [...currentRoomSet];
-				console.log(currentRoom)
-				console.log(socketId, 'socketId')
+				console.log('currentRoom:', currentRoom);
+				console.log('socketId:', socketId);
 				//generate username if not logged-in
 				const username = !user ? `guest${currentRoom.length + 1}` : user;
 				const host = currentRoom.length === 1;
@@ -58,7 +58,7 @@ io.on('connection', (socket) => {
 				// 	const { username } = users[socketId];
 				// 	return username;
 				// });
-				console.log(users)
+				console.log('all users:', users);
 				//emit user-added event to all users in current room
 				// io.in(room).emit('user-added', JSON.stringify(roomUsers));
 				// emits username-generated event to new socket
@@ -68,7 +68,8 @@ io.on('connection', (socket) => {
 	);
 	//USER DISCONNECTS
 	socket.on('disconnecting', () => {
-		console.log('disconnecting', socket.id);
+		console.log('disconnecting');
+		delete users[socket.id];
 	});
 });
 
