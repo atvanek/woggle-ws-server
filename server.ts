@@ -11,7 +11,7 @@ const BASE_URL =
 	MODE === 'production' ? 'https://woggle.vercel.app' : 'http://localhost:3000';
 
 const app = express();
-const PORT = MODE === 'production' ? 80 : 8080;
+const PORT = MODE === 'production' ? 3000 : 8080;
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
 	cors: {
