@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -15,9 +16,9 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
 	cors: {
 		origin: BASE_URL,
-		methods: ['GET', 'POST'],
 	},
 });
+
 
 // import generateLetters from '../utils/generateLetters.js';
 
