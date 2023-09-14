@@ -15,7 +15,7 @@ const PORT = MODE === 'production' ? 3000 : 8080;
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
 	cors: {
-		origin: BASE_URL,
+		origin: '*',
 	},
 });
 
