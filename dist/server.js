@@ -21,7 +21,12 @@ const io = new socket_io_1.Server(httpServer, {
     },
 });
 app.use(express_1.default.json());
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: BASE_URL,
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+}));
 //global error handler
 app.use((err, _req, res, _next) => {
     console.log(err);
