@@ -2,6 +2,7 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import dotenv from 'dotenv';
+import generateLetters from './utils/generateLetters';
 
 dotenv.config();
 
@@ -18,9 +19,6 @@ const io = new Server(httpServer, {
 		methods: ['GET', 'POST'],
 	},
 });
-
-// import generateLetters from '../utils/generateLetters.js';
-
 //username, room, websocket, score data
 type User = {
 	username: string;
@@ -32,6 +30,9 @@ type Users = {
 };
 const users: Users = {};
 
+app.get('/letters', (_, res) => {
+	return res.json(generateLetters());
+});
 //websocket logic
 io.on('connection', (socket) => {
 	console.log('connection', socket.id);
@@ -66,6 +67,10 @@ io.on('connection', (socket) => {
 			}
 		}
 	);
+	socket.on('start-request', (room) => {
+		console.log('start-request');
+		io.in(room).emit('game-start', generateLetters());
+	});
 	//USER DISCONNECTS
 	socket.on('disconnecting', () => {
 		console.log('disconnecting');

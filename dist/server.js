@@ -16,6 +16,7 @@ const express_1 = __importDefault(require("express"));
 const http_1 = require("http");
 const socket_io_1 = require("socket.io");
 const dotenv_1 = __importDefault(require("dotenv"));
+const generateLetters_1 = __importDefault(require("./utils/generateLetters"));
 dotenv_1.default.config();
 const MODE = process.env.NODE_ENV;
 const BASE_URL = MODE === 'production' ? 'https://woggle.vercel.app' : 'http://localhost:3000';
@@ -29,6 +30,9 @@ const io = new socket_io_1.Server(httpServer, {
     },
 });
 const users = {};
+app.get('/letters', (_, res) => {
+    return res.json((0, generateLetters_1.default)());
+});
 //websocket logic
 io.on('connection', (socket) => {
     console.log('connection', socket.id);
@@ -61,11 +65,14 @@ io.on('connection', (socket) => {
             // io.to(socketId).emit('username-generated', username, host);
         }
     }));
+    socket.on('start-request', (room) => {
+        console.log('start-request');
+        io.in(room).emit('game-start', (0, generateLetters_1.default)());
+    });
     //USER DISCONNECTS
     socket.on('disconnecting', () => {
+        console.log('disconnecting');
         delete users[socket.id];
-        console.log('disconnecting', socket.id);
-        console.log('users:', users);
     });
 });
 // socket.on('new-board', (room) => {
